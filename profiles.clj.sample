@@ -1,0 +1,10 @@
+;; This is a sample file. Copy this file to "profiles.clj".
+;; This file should contain Leiningen profiles you want kept out of
+;; source control.
+
+{:profiles/dev  {:env {:facebook {:client-id ""
+                                  :client-secret ""}
+                       :db {:uri "datomic:free://localhost:4334/tabula"}}}
+ :profiles/test {:env {:facebook {:client-id ""
+                                  :client-secret ""}
+                       :db {:uri "datomic:free://localhost:4334/tabula"}}}}
