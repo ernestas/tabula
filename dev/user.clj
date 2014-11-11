@@ -11,7 +11,7 @@
 (def config
   {:http {:port 3000
           :ssl-port 3443
-          :keystore "keystore"
+          :keystore "dev/keystore"
           :key-password "123456"}
    :app  {:middleware [wrap-stacktrace]}})
 
