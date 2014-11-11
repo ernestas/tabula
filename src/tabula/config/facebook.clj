@@ -3,10 +3,12 @@
             [ring.util.response :refer [get-header]]
             [ring.util.request :refer [request-url]]))
 
+(def version "v2.2")
+
 (defn app-info
   [& [request]]
-  {:authorization-uri "https://www.facebook.com/v2.2/dialog/oauth"
-   :access-token-uri "https://graph.facebook.com/v2.2/oauth/access_token"
+  {:authorization-uri (str "https://www.facebook.com/" version "/dialog/oauth")
+   :access-token-uri (str "https://graph.facebook.com/" version "/oauth/access_token")
    :redirect-uri (cond (nil? request) ""
                        (-> request :params :signed_request)
                        (get-header request "referer")
