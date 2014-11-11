@@ -10,7 +10,7 @@
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [tabula.middleware.facebook :refer [wrap-fix-request-method
                                                 wrap-session]]
-            [tabula.endpoint.servers :refer [servers-endpoint]]
+            [tabula.endpoint.home :refer [home-endpoint]]
             [tabula.component.db :refer [database-component]]))
 
 (def site-defaults
@@ -38,11 +38,11 @@
 (defn new-system [config]
   (let [config (meta-merge base-config config)]
     (-> (component/system-map
-         :app     (handler-component (:app config))
-         :http    (jetty-server (:http config))
-         :servers (endpoint-component servers-endpoint)
-         :db      (database-component (-> config :db :uri)))
+         :app  (handler-component (:app config))
+         :http (jetty-server (:http config))
+         :home (endpoint-component home-endpoint)
+         :db   (database-component (-> config :db :uri)))
         (component/system-using
          {:http [:app]
-          :app  [:servers]
-          :servers [:db]}))))
+          :app  [:home]
+          :home [:db]}))))

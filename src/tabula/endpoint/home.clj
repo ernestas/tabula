@@ -1,6 +1,6 @@
-(ns tabula.endpoint.servers
+(ns tabula.endpoint.home
   (:require [compojure.core :refer :all]))
 
-(defn servers-endpoint [{:keys [db]}]
+(defn home-endpoint [{:keys [db]}]
   (routes
    (GET "/" request (str request "<br><br>" (:conn db)))))
