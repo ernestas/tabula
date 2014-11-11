@@ -8,7 +8,8 @@
             [ring.component.jetty :refer [jetty-server]]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
-            [tabula.middleware.facebook :refer [wrap-fix-request-method
+            [tabula.middleware.facebook :refer [wrap-user
+                                                wrap-fix-request-method
                                                 wrap-session]]
             [tabula.endpoint.home :refer [home-endpoint]]
             [tabula.component.db :refer [database-component]]))
@@ -22,6 +23,7 @@
 (defn- wrap-site
   [handler]
   (-> handler
+      wrap-user
       wrap-anti-forgery ;; TODO: :error-handler
       wrap-session
       wrap-fix-request-method))

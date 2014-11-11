@@ -5,7 +5,20 @@
             [clj-facebook-graph.auth :refer [decode-signed-request]]
             [clj-oauth2.client :as oauth2-client]
             [tabula.config.facebook :refer [app-info]]
+            [tabula.model.facebook :as facebook]
             [tabula.view.login :refer [auth-dialog]]))
+
+(defn wrap-user
+  [handler]
+  (fn [{{user-id :user-id {access-token :access-token} :oauth2} :session
+        :as request}]
+    (if user-id
+      (handler request)
+      (let [user-data (facebook/me access-token)]
+        (-> request
+            (assoc-in [:session :user-id] (:id user-data))
+            handler
+            (assoc-in [:session :user-id] (:id user-data)))))))
 
 (defn- get-code-map
   [request sr]

@@ -8,6 +8,7 @@
 (defn app-info
   [& [request]]
   {:authorization-uri (str "https://www.facebook.com/" version "/dialog/oauth")
+   :graph-uri (str "https://graph.facebook.com/" version)
    :access-token-uri (str "https://graph.facebook.com/" version "/oauth/access_token")
    :redirect-uri (cond (nil? request) ""
                        (-> request :params :signed_request)
