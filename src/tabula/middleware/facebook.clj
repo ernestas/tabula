@@ -6,15 +6,17 @@
             [clj-oauth2.client :as oauth2-client]
             [tabula.config.facebook :refer [app-info]]
             [tabula.model.facebook :as facebook]
+            [tabula.model.user :as user]
             [tabula.view.login :refer [auth-dialog]]))
 
 (defn wrap-user
-  [handler]
+  [handler db]
   (fn [{{user-id :user-id {access-token :access-token} :oauth2} :session
         :as request}]
     (if user-id
       (handler request)
       (let [user-data (facebook/me access-token)]
+        (user/add db user-data)
         (-> request
             (assoc-in [:session :user-id] (:id user-data))
             handler

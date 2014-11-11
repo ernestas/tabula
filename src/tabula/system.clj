@@ -21,9 +21,9 @@
    :proxy true})
 
 (defn- wrap-site
-  [handler]
+  [handler db]
   (-> handler
-      wrap-user
+      (wrap-user db)
       wrap-anti-forgery ;; TODO: :error-handler
       wrap-session
       wrap-fix-request-method))
@@ -31,7 +31,7 @@
 (def base-config
   {:http {:port 3000}
    :app  {:middleware [[wrap-not-found :not-found]
-                       wrap-site
+                       [wrap-site :db]
                        [wrap-defaults :defaults]]
           :not-found  "errors/404.html"
           :defaults   (meta-merge api-defaults site-defaults)}
@@ -40,11 +40,11 @@
 (defn new-system [config]
   (let [config (meta-merge base-config config)]
     (-> (component/system-map
-         :app  (handler-component (:app config))
          :http (jetty-server (:http config))
+         :app  (handler-component (:app config))
          :home (endpoint-component home-endpoint)
          :db   (database-component (-> config :db :uri)))
         (component/system-using
          {:http [:app]
-          :app  [:home]
+          :app  [:home :db]
           :home [:db]}))))
