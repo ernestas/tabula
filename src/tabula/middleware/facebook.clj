@@ -5,7 +5,7 @@
             [clj-facebook-graph.auth :refer [decode-signed-request]]
             [clj-oauth2.client :as oauth2-client]
             [tabula.config.facebook :refer [app-info]]
-            [tabula.views.login :refer [auth-dialog]]))
+            [tabula.view.login :refer [auth-dialog]]))
 
 (defn- get-code-map
   [request sr]
