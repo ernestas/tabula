@@ -54,7 +54,7 @@
 ;; TODO: remove
 (defn- session-options
   [options]
-  {:store        (options :store (cookie-store))
+  {:store        (options :store (cookie-store {:key "1234567812345678"}))
    :cookie-name  (options :cookie-name "ring-session")
    :cookie-attrs (merge {:path "/"
                          :http-only true}
