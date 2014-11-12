@@ -4,7 +4,7 @@
             [ring.middleware.session.cookie :refer [cookie-store]]
             [clj-facebook-graph.auth :refer [decode-signed-request]]
             [clj-oauth2.client :as oauth2-client]
-            [tabula.config.facebook :refer [app-info]]
+            [tabula.config.facebook :as fb]
             [tabula.model.facebook :as facebook]
             [tabula.model.user :as user]
             [tabula.view.login :refer [auth-dialog]]))
@@ -34,8 +34,8 @@
   [request]
   (decode-signed-request
    (or (get-in request [:params :signed_request])
-       (get-in request [:cookies (str "fbsr_" ((app-info) :client-id)) :value]))
-   ((app-info) :client-secret)))
+       (get-in request [:cookies (str "fbsr_" ((fb/app-info) :client-id)) :value]))
+   ((fb/app-info) :client-secret)))
 
 (defn- timestamp-to-max-age
   [timestamp]
@@ -55,7 +55,7 @@ returned by oauth2-client is a max-age (time in seconds till the expiration)"
        :max-age (timestamp-to-max-age timestamp)}
       (when-let [code (get-code-map request sr)]
         (let [{access-token :access-token, {max-age :expires} :params}
-              (oauth2-client/get-access-token (app-info request) code)]
+              (oauth2-client/get-access-token (fb/app-info request) code)]
           {:access-token access-token
            :max-age (Integer. max-age)})))))
 
