@@ -5,4 +5,4 @@
 (defn home-endpoint [{:keys [db]}]
   (routes
    (GET "/" request (str request "<br><br>"
-                         (user/get-user db (-> request :session :user-id))))))
+                         (user/get-user db (-> request :session :id))))))

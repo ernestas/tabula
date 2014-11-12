@@ -11,16 +11,18 @@
 
 (defn wrap-user
   [handler db]
-  (fn [{{user-id :user-id {access-token :access-token} :oauth2} :session
+  (fn [{{user-id :id {access-token :access-token} :oauth2 :as session}
+        :session
         :as request}]
     (if user-id
       (handler request)
-      (let [user-data (facebook/me access-token)]
+      (let [user-data (facebook/me access-token)
+            new-session (merge session user-data)]
         (user/add db user-data)
         (-> request
-            (assoc-in [:session :user-id] (:id user-data))
+            (assoc :session new-session)
             handler
-            (assoc-in [:session :user-id] (:id user-data)))))))
+            (assoc :session new-session))))))
 
 (defn- get-code-map
   [request sr]
