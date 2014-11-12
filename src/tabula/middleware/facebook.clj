@@ -37,19 +37,27 @@
        (get-in request [:cookies (str "fbsr_" ((app-info) :client-id)) :value]))
    ((app-info) :client-secret)))
 
+(defn- timestamp-to-max-age
+  [timestamp]
+  (- (Integer. timestamp)
+     (int (/ (System/currentTimeMillis) 1000))))
+
 (defn- new-access-token-info
-  "Returns {:token '123' :expires '456'}"
+  "Returns {:access-token \"123\" :max-age 456}
+
+NOTE: :expires key in signed-request is a timestamp, but :expires key in a map
+returned by oauth2-client is a max-age (time in seconds till the expiration)"
   [request]
   (let [sr (get-signed-request request)
-        {:keys [:oauth_token :expires]} sr]
-    (if oauth_token
-      {:access-token oauth_token
-       :expires expires}
+        {access-token :oauth_token, timestamp :expires} sr]
+    (if access-token
+      {:access-token access-token
+       :max-age (timestamp-to-max-age timestamp)}
       (when-let [code (get-code-map request sr)]
-        (let [{access-token :access-token, {expires :expires} :params}
+        (let [{access-token :access-token, {max-age :expires} :params}
               (oauth2-client/get-access-token (app-info request) code)]
           {:access-token access-token
-           :expires expires})))))
+           :max-age (Integer. max-age)})))))
 
 ;; TODO: remove
 (defn- session-options
@@ -61,11 +69,6 @@
                         (options :cookie-attrs)
                         (if-let [root (options :root)]
                           {:path root}))})
-
-(defn- timestamp-to-max-age
-  [timestamp]
-  (- timestamp
-     (int (/ (System/currentTimeMillis) 1000))))
 
 (defn wrap-session
   [handler]
@@ -79,7 +82,7 @@
         (if-let [new-token (new-access-token-info new-request)]
           (let [options (assoc-in options
                                   [:cookie-attrs :max-age]
-                                  (timestamp-to-max-age (new-token :expires)))]
+                                  (new-token :max-age))]
             (-> new-request
                 (assoc-in [:session :oauth2] new-token)
                 handler
