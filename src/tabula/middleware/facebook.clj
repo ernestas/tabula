@@ -70,7 +70,7 @@
 (defn wrap-session
   [handler]
   (fn [request]
-    (let [options {} ;; TODO: carmine-store
+    (let [options {:cookie-attrs {:secure true}} ;; TODO: carmine-store
           options (session-options options) ;; TODO: remove
           new-request (session-request request options)
           old-token (-> new-request :session :oauth2)]
