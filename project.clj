@@ -32,5 +32,9 @@
                    :dependencies [[reloaded.repl "0.1.0"]
                                   [org.clojure/tools.namespace "0.2.4"]
                                   [kerodon "0.4.0"]]
+                   :plugins [[lein-less "1.7.2"]]
                    :env {:port 3000}}
-   :project/test  {}})
+   :project/test  {}}
+  :hooks [leiningen.less]
+  :less {:source-paths ["src/resources/less"]
+         :target-path "resources/public/css"})
