@@ -6,7 +6,7 @@
             [duct.middleware.not-found :refer [wrap-not-found]]
             [meta-merge.core :refer [meta-merge]]
             [ring.component.jetty :refer [jetty-server]]
-            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.defaults :refer [wrap-defaults secure-api-defaults]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [tabula.middleware.facebook :refer [wrap-user
                                                 wrap-fix-request-method
@@ -34,7 +34,7 @@
                        [wrap-site :db]
                        [wrap-defaults :defaults]]
           :not-found  "errors/404.html"
-          :defaults   (meta-merge api-defaults site-defaults)}
+          :defaults   (meta-merge secure-api-defaults site-defaults)}
    :db   {:uri (-> env :db :uri)}})
 
 (defn new-system [config]
