@@ -10,6 +10,7 @@
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [tabula.middleware.facebook :as fb]
             [tabula.endpoint.home :refer [home-endpoint]]
+            [tabula.endpoint.server :refer [server-endpoint]]
             [tabula.component.db :refer [database-component]]))
 
 (def site-defaults
@@ -41,8 +42,10 @@
          :http (jetty-server (:http config))
          :app  (handler-component (:app config))
          :home (endpoint-component home-endpoint)
+         :server (endpoint-component server-endpoint)
          :db   (database-component (-> config :db :uri)))
         (component/system-using
          {:http [:app]
-          :app  [:home :db]
-          :home [:db]}))))
+          :app  [:home :server :db]
+          :home [:db]
+          :server [:db]}))))
