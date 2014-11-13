@@ -9,6 +9,7 @@
             [ring.middleware.defaults :refer [wrap-defaults secure-api-defaults]]
             [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [tabula.middleware.facebook :as fb]
+            [tabula.middleware.home :as home]
             [tabula.endpoint.home :refer [home-endpoint]]
             [tabula.endpoint.server :refer [server-endpoint]]
             [tabula.component.db :refer [database-component]]))
@@ -22,6 +23,7 @@
 (defn- wrap-site
   [handler db]
   (-> handler
+      home/wrap-go-to-server
       (fb/wrap-user db)
       wrap-anti-forgery ;; TODO: :error-handler
       fb/wrap-session
