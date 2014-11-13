@@ -5,5 +5,5 @@
 (defn server-endpoint [{:keys [db]}]
   (context
    ;; TODO: only match valid server names
-   "/server/:server" [server]
-   (GET "/" request (server-view/draw server request db))))
+   "/server/:server-id" [server-id]
+   (GET "/" request (server-view/draw server-id request db))))

@@ -5,5 +5,6 @@
   [handler]
   (fn [{uri :uri :as request}]
     (if (= uri "/")
-      (redirect "/server/lt1")
+      ;; FIXME:
+      (redirect "/server/17592186045418")
       (handler request))))
