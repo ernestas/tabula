@@ -3,6 +3,6 @@
             [tabula.view.page :as page]))
 
 (defn draw
-  [server-id request db]
-  (page/layout (clojure.string/join " " ["Server" server-id
-                                         (server/server-name db server-id)])))
+  [server-name request db]
+  (page/layout (clojure.string/join " " ["Server" server-name
+                                         (server/id db server-name)])))

@@ -7,9 +7,9 @@
 
 (defn handler [db]
   (context
-   "/server/:server-id" [server-id]
-   (GET "/" request (server-view/draw server-id request db))
-   ;; TODO: only match a valid server names
+   ;; TODO: only match valid server names
+   "/server/:server" [server]
+   (GET "/" request (server-view/draw server request db))
    (registration/routes db server-id)))
 
 (defn wrap-register
