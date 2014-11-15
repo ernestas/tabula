@@ -4,7 +4,7 @@
 (defn add
   [{conn :conn} user-id server-name tribe]
   (d/transact conn
-              [{:db/id (Long. user-id)
+              [{:db/id [:user/id user-id]
                 :user/player #db/id[:db.part/user -1]}
                {:db/id #db/id[:db.part/user -1]
                 :player/tribe (Long. tribe)
@@ -13,11 +13,12 @@
 (defn tribe
   [{conn :conn} user-id server-name]
   (q '[:find ?tribe .
-       :in $ ?u ?server-name
+       :in $ ?user-id ?server-name
        :where
+       [?u :user/id ?user-id]
        [?u :user/player ?p]
        [?p :player/server ?s]
        [?s :server/name ?server-name]
        [?p :player/tribe ?tribe]]
      (db conn)
-     (Long. user-id) server-name))
+     user-id server-name))
