@@ -8,20 +8,20 @@
 (defn handler [db]
   (context
    ;; TODO: only match valid server names
-   "/server/:server" [server]
-   (GET "/" request (server-view/draw server request db))
-   (registration/routes db server-id)))
+   "/server/:server-name" [server-name]
+   (GET "/" request (server-view/draw server-name request db))
+   (registration/routes db server-name)))
 
 (defn wrap-register
   [db]
   (fn [handler]
-    (fn [{{server-id :server-id} :params, {user-id :id} :session
+    (fn [{{server-name :server-name} :params, {user-id :id} :session
           request-method :request-method, uri :uri, :as request}]
-      (let [registration-route (str "/server/" server-id "/registration")
-            player-tribe (player/tribe db user-id server-id)]
+      (let [registration-route (str "/server/" server-name "/registration")
+            player-tribe (player/tribe db user-id server-name)]
         (if (= uri registration-route)
           (if player-tribe
-            (redirect (str "/server/" server-id))
+            (redirect (str "/server/" server-name))
             (handler request))
           (if player-tribe
             (handler request)

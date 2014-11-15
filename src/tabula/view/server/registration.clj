@@ -19,7 +19,7 @@
                         (submit-button "Play!")))))
 
 (defn routes
-  [db server-id]
+  [db server-name]
   (compojure/routes
    (GET "/registration"
         {uri :uri}
@@ -28,6 +28,6 @@
          [tribe :as {{user-id :id} :session, uri :uri, :as request}]
          ;; TODO: validation
          (if (seq tribe)
-           (do @(player/add db user-id server-id tribe)
-               (redirect (str "/server/" server-id)))
+           (do @(player/add db user-id server-name tribe)
+               (redirect (str "/server/" server-name)))
            (view uri)))))
