@@ -19,7 +19,7 @@
           request-method :request-method, uri :uri, :as request}]
       (let [registration-route (str "/server/" server-name "/registration")
             player-tribe (player/tribe db user-id server-name)]
-        (if (= uri registration-route)
+        (if (.startsWith uri registration-route)
           (if player-tribe
             (redirect (str "/server/" server-name))
             (handler request))
