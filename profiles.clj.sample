@@ -9,4 +9,4 @@
  :profiles/test {:env {:facebook {:client-id ""
                                   :client-secret ""}
                        :db {:uri "datomic:free://localhost:4334/tabula"}
-                       :cache-buster "(rand-int 1000000)"}}}}
+                       :cache-buster "(rand-int 1000000)"}}}
