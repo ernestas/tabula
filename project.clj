@@ -14,7 +14,7 @@
                  [mavericklou/clj-facebook-graph "0.5.3"
                   :exclusions [[mavericklou/clj-oauth2]]]
                  [sudharsh/clj-oauth2 "0.5.3"]
-                 [com.datomic/datomic-free "0.9.5067"]]
+                 [com.datomic/datomic-free "0.9.5067" :exclusions [joda-time]]]
   :plugins [[lein-environ "1.0.0"]
             [lein-gen "0.2.0"]]
   :generators [[duct/generators "0.0.3"]]
