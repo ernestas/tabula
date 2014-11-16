@@ -11,7 +11,8 @@
           [:meta {:http-equiv "X-UA-Compatible" :content "IE=edge"}]
           [:title "Tabula"]
           ;; TODO: include project version string
-          (include-css (str "/css/tabula.css?" (eval (env :cache-buster))))
+          (include-css (str "/css/tabula.css?"
+                            (eval (read-string (env :cache-buster)))))
           "<!--[if lt IE 9]>"
           (include-js "/js/html5shiv.3.7.2.min.js" "/js/respond.1.4.2.min.js")
           "<![endif]-->"]
